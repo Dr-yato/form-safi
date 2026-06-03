@@ -365,6 +365,9 @@ function sendEmailNotification(newResponse, totalCount) {
 // 1. GET /api/responses - Récupérer toutes les réponses pour le dashboard
 app.get('/api/responses', async (req, res) => {
   try {
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
     const responses = await loadResponses();
     res.json({ status: 'success', data: responses });
   } catch (error) {
@@ -414,8 +417,8 @@ app.post('/api/submit', async (req, res) => {
       totalCount = responses.length;
     }
 
-    // Envoyer la notification email de façon asynchrone sans bloquer la requête
-    sendEmailNotification(newResponse, totalCount);
+    // Envoyer la notification email et attendre la fin avant de répondre (requis sur Vercel)
+    await sendEmailNotification(newResponse, totalCount);
 
     res.json({
       status: 'success',

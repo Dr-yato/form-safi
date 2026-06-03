@@ -141,7 +141,7 @@ function initDashboard() {
 function loadFromRealtime() {
     const isLocalApi = APPS_SCRIPT_URL.startsWith('/') || APPS_SCRIPT_URL.includes('localhost') || APPS_SCRIPT_URL.includes('127.0.0.1');
     if (isLocalApi) {
-        fetch('/api/responses')
+        fetch('/api/responses?_t=' + Date.now())
             .then(res => res.json())
             .then(resData => {
                 if (resData && resData.status === 'success' && Array.isArray(resData.data)) {

@@ -113,5 +113,78 @@
     "q13_table": [],
     "id": 2,
     "submission_date": "2026-06-03T16:27:22.010Z"
+  },
+  {
+    "q1_gender": "femme",
+    "q2_age_group": "35_49",
+    "q4_residence_duration": "moins_5",
+    "q5_education_level": "college",
+    "q6_profession": "sans_emploi",
+    "q7_visited_cinema": "oui",
+    "q9_frequency": "une_deux_mois",
+    "q15_1": "2",
+    "q15_2": "3",
+    "q15_3": "3",
+    "q15_4": "3",
+    "q15_5": "3",
+    "q15_6": "4",
+    "q15_7": "4",
+    "q15_8": "5",
+    "q15_9": "5",
+    "q15_10": "5",
+    "q17_1": "1",
+    "q17_2": "2",
+    "q17_3": "3",
+    "q17_4": "4",
+    "q17_5": "5",
+    "q17_6": "5",
+    "q19_1": "1",
+    "q19_2": "2",
+    "q19_3": "3",
+    "q19_4": "4",
+    "q19_5": "5",
+    "q19_6": "4",
+    "q22_seen_content": "non",
+    "q24_follow_pages": "oui",
+    "q25_1": "1",
+    "q25_2": "2",
+    "q25_3": "4",
+    "q27_recontact": "oui",
+    "q3_neighborhood": "",
+    "q11_other": "",
+    "q12_memory": "uhvj",
+    "q13_text": "jg",
+    "q13_name_1": "u",
+    "q13_location_1": "",
+    "q13_state_1": "",
+    "q16_main_cause": "gjjgjgj",
+    "q18_meaning": "jjjjgjv",
+    "q20_other": "",
+    "q26_comments": "jhhgg",
+    "q27_contact_details": "",
+    "q8_periods": [
+      "annees_2010"
+    ],
+    "q10_companions": [
+      "couple"
+    ],
+    "q11_movie_types": [
+      "action"
+    ],
+    "q14_what_became": [
+      "commerces"
+    ],
+    "q20_desired_usage": [
+      "spectacles"
+    ],
+    "q21_support_type": [
+      "frequenter"
+    ],
+    "q23_channels": [
+      "tv_radio"
+    ],
+    "q13_table": [],
+    "id": 3,
+    "submission_date": "2026-06-03T18:24:46.408Z"
   }
 ]
