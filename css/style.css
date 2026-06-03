@@ -2128,21 +2128,6 @@ body.dark-mode .admission-ticket {
         width: 100%;
     }
 
-    .header-container {
-        justify-content: center;
-        text-align: center;
-    }
-
-    .header-nav {
-        margin-left: 0;
-        width: 100%;
-        justify-content: center;
-    }
-
-    .researcher-badge {
-        min-width: unset;
-        width: 100%;
-    }
 }
 
 @media (max-width: 480px) {
@@ -2809,6 +2794,157 @@ body.rtl-layout.moroccan-survey .form-label {
     .morocco-banner-badge,
     .morocco-desc-ornament {
         animation: none !important;
+    }
+}
+
+
+/* ─── Mobile header — compact, scrollable ─── */
+@media (max-width: 768px) {
+    .app-header,
+    .moroccan-survey .app-header {
+        position: relative;
+        top: auto;
+        padding: 0.65rem 0.85rem;
+    }
+
+    .header-container {
+        display: grid;
+        grid-template-columns: auto auto 1fr;
+        grid-template-areas:
+            "fac-logo master-logo logo-block"
+            "nav nav nav"
+            "badge badge badge";
+        gap: 0.45rem 0.6rem;
+        align-items: center;
+        justify-content: stretch;
+        text-align: left;
+    }
+
+    .univ-logo {
+        grid-area: fac-logo;
+        height: 42px;
+    }
+
+    .master-logo {
+        grid-area: master-logo;
+        height: 36px;
+    }
+
+    .logo-block {
+        grid-area: logo-block;
+        min-width: 0;
+    }
+
+    .maroc-seal {
+        font-size: 0.58rem;
+        letter-spacing: 0.08em;
+        line-height: 1.2;
+    }
+
+    .university-name {
+        font-size: 0.82rem;
+        line-height: 1.15;
+    }
+
+    .speciality {
+        display: none;
+    }
+
+    .researcher-badge {
+        grid-area: badge;
+        width: 100%;
+        min-width: 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.35rem 0.75rem;
+        padding: 0.45rem 0.85rem;
+        font-size: 0.72rem;
+        border-radius: 8px;
+    }
+
+    .researcher-badge::before,
+    .researcher-badge::after {
+        display: none;
+    }
+
+    .researcher-badge .badge-label {
+        font-size: 0.58rem;
+        margin: 0;
+    }
+
+    .researcher-badge .badge-name {
+        font-size: 0.78rem;
+        margin: 0;
+    }
+
+    .researcher-badge .badge-enc {
+        font-size: 0.68rem;
+        margin: 0;
+        padding: 0;
+        border: none;
+        flex: 1 1 100%;
+    }
+
+    .header-nav {
+        grid-area: nav;
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+        gap: 0.4rem;
+        flex-wrap: nowrap;
+    }
+
+    .header-nav a {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.68rem;
+        letter-spacing: 0.04em;
+        flex: 1;
+        text-align: center;
+        max-width: 50%;
+    }
+
+    .moroccan-survey .app-header::after {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-header {
+        padding: 0.5rem 0.65rem;
+    }
+
+    .univ-logo {
+        height: 34px;
+    }
+
+    .master-logo {
+        height: 30px;
+    }
+
+    .maroc-seal {
+        display: none;
+    }
+
+    .university-name {
+        font-size: 0.75rem;
+    }
+
+    .researcher-badge .badge-label {
+        display: none;
+    }
+
+    .researcher-badge .badge-enc {
+        flex: 0 1 auto;
+    }
+
+    .researcher-badge .badge-enc strong {
+        font-weight: 700;
+    }
+
+    .header-nav a {
+        padding: 0.35rem 0.5rem;
+        font-size: 0.62rem;
     }
 }
 
