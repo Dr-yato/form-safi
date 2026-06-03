@@ -4,16 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enquête — Salles de cinéma fermées de Safi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Scheherazade+New:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="moroccan-survey">
+    <div class="zellige-bg" aria-hidden="true"></div>
+    <div class="morocco-corners" aria-hidden="true">
+        <div class="morocco-star star-tl"></div>
+        <div class="morocco-star star-tr"></div>
+        <div class="morocco-star star-bl"></div>
+        <div class="morocco-star star-br"></div>
+    </div>
+    <div class="film-grain" aria-hidden="true"></div>
+    <div class="spotlight spotlight-left" aria-hidden="true"></div>
+    <div class="spotlight spotlight-right" aria-hidden="true"></div>
+    <div class="floating-motifs" aria-hidden="true">
+        <span class="motif motif-1"></span>
+        <span class="motif motif-2"></span>
+        <span class="motif motif-3"></span>
+        <span class="motif motif-4"></span>
+    </div>
 
 <!-- ===================== HEADER ===================== -->
 <header class="app-header">
     <div class="header-container">
         <img src="images/logo_fac.png" alt="Logo Faculté" class="univ-logo">
         <div class="logo-block">
-            <span class="maroc-seal" data-translate="header_univ">Université Cadi Ayyad</span>
+            <span class="maroc-seal" data-translate="header_univ"><span class="seal-star" aria-hidden="true"></span> Université Cadi Ayyad</span>
             <span class="university-name" data-translate="header_fac">Faculté Polydisciplinaire de Safi</span>
             <span class="speciality" data-translate="header_master">Master CMIC : Communication, Médias et Industries Créatives</span>
         </div>
@@ -36,17 +55,35 @@
 <main class="app-main">
 
     <!-- Progress bar -->
-    <div class="survey-progress-wrapper glass-card">
+    <div class="survey-progress-wrapper glass-card cinema-progress-card morocco-progress-card">
+        <div class="progress-header">
+            <span class="now-showing-badge"><span class="badge-star" aria-hidden="true"></span> Enquête · Safi · المغرب</span>
+            <div class="progress-text">
+                <span id="sectionIndicator" data-translate="progress_section">Section 1 sur 8</span>
+                <span id="percentIndicator" data-translate="progress_percent">0% Complété</span>
+            </div>
+        </div>
+        <div class="section-stepper" id="sectionStepper" aria-label="Sections du questionnaire">
+            <button type="button" class="step-pill active" data-step="A" disabled>A</button>
+            <button type="button" class="step-pill" data-step="B" disabled>B</button>
+            <button type="button" class="step-pill" data-step="C" disabled>C</button>
+            <button type="button" class="step-pill" data-step="D" disabled>D</button>
+            <button type="button" class="step-pill" data-step="E" disabled>E</button>
+            <button type="button" class="step-pill" data-step="F" disabled>F</button>
+            <button type="button" class="step-pill" data-step="G" disabled>G</button>
+            <button type="button" class="step-pill" data-step="H" disabled>H</button>
+        </div>
         <div class="progress-bar-container">
             <div class="progress-bar-fill" id="progressBar"></div>
-        </div>
-        <div class="progress-text">
-            <span id="sectionIndicator" data-translate="progress_section">Section 1 sur 8</span>
-            <span id="percentIndicator" data-translate="progress_percent">0% Complété</span>
         </div>
     </div>
 
     <!-- Main survey card -->
+    <div class="morocco-frame">
+        <div class="morocco-frame-corner morocco-frame-tl"></div>
+        <div class="morocco-frame-corner morocco-frame-tr"></div>
+        <div class="morocco-frame-corner morocco-frame-bl"></div>
+        <div class="morocco-frame-corner morocco-frame-br"></div>
     <div class="glass-card survey-card">
 
         <!-- Controls row -->
@@ -67,12 +104,22 @@
 
         <!-- Survey intro -->
         <div class="survey-intro">
-            <div class="cinema-banner-wrapper">
+            <div class="morocco-horseshoe-arch" aria-hidden="true"></div>
+            <div class="cinema-banner-wrapper moroccan-arch-frame">
+                <div class="zellige-banner-border" aria-hidden="true"></div>
                 <img src="images/cinema_banner.png" alt="Patrimoine Cinémas Safi" class="cinema-banner-img">
                 <div class="cinema-banner-overlay"></div>
+                <div class="cinema-curtain cinema-curtain-left" aria-hidden="true"></div>
+                <div class="cinema-curtain cinema-curtain-right" aria-hidden="true"></div>
+                <div class="banner-content">
+                    <span class="banner-eyebrow">Master CMIC · Université Cadi Ayyad</span>
+                    <h2 id="survey-title" data-translate="survey_title">Le patrimoine des salles de cinéma fermées de la ville de Safi : mémoire, représentations et perspectives de valorisation</h2>
+                </div>
             </div>
-            <h2 id="survey-title" data-translate="survey_title">Le patrimoine des salles de cinéma fermées de la ville de Safi : mémoire, représentations et perspectives de valorisation</h2>
-            <p id="survey-desc" data-translate="survey_desc">Dans le cadre d'un mémoire de fin d'études du Master CMIC (Communication, Médias et Industries Créatives) à la Faculté Polydisciplinaire de Safi, nous réalisons cette enquête sur les anciennes salles de cinéma de la ville de Safi. Votre participation est précieuse et vos réponses resteront strictement anonymes et confidentielles. Le questionnaire prend environ 10 à 15 minutes. Merci de votre contribution !</p>
+            <div class="survey-desc-card morocco-desc-card">
+                <div class="desc-icon morocco-desc-ornament" aria-hidden="true"></div>
+                <p id="survey-desc" data-translate="survey_desc">Dans le cadre d'un mémoire de fin d'études du Master CMIC (Communication, Médias et Industries Créatives) à la Faculté Polydisciplinaire de Safi, nous réalisons cette enquête sur les anciennes salles de cinéma de la ville de Safi. Votre participation est précieuse et vos réponses resteront strictement anonymes et confidentielles. Le questionnaire prend environ 10 à 15 minutes. Merci de votre contribution !</p>
+            </div>
         </div>
 
         <!-- ===================== FORM ===================== -->
@@ -394,10 +441,10 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input type="text" name="q13_name_1" class="form-input table-input"></td>
-                                    <td><input type="text" name="q13_location_1" class="form-input table-input"></td>
-                                    <td><input type="text" name="q13_state_1" class="form-input table-input"></td>
-                                    <td><button type="button" class="btn-remove-row" onclick="removeTableRow(this)" title="Supprimer">✕</button></td>
+                                    <td><input type="text" class="form-input row-cinema-name" placeholder="Ex: Atlantide"></td>
+                                    <td><input type="text" class="form-input row-cinema-loc" placeholder="Ex: Centre-ville"></td>
+                                    <td><input type="text" class="form-input row-cinema-state" placeholder="Ex: Fermé, ruiné..."></td>
+                                    <td style="text-align:center;"><button type="button" class="btn-remove-row" onclick="removeTableRow(this)" title="Supprimer">✕</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -934,12 +981,16 @@
 
         </form>
     </div>
+    </div>
 </main>
 
 <!-- ===================== SUCCESS MODAL ===================== -->
 <div class="modal-overlay" id="confirmModal" style="display:none;">
-    <div class="modal-content glass-card">
-        <div class="modal-icon">✅</div>
+    <div class="modal-content glass-card admission-ticket">
+        <div class="ticket-notch ticket-notch-left" aria-hidden="true"></div>
+        <div class="ticket-notch ticket-notch-right" aria-hidden="true"></div>
+        <div class="modal-icon">🎬</div>
+        <span class="ticket-stub-label">Admis · Merci</span>
         <h3 class="modal-title" data-translate="modal_title">Merci pour votre participation !</h3>
         <p class="modal-text" data-translate="modal_text">Vos réponses ont été enregistrées avec succès. Votre contribution est précieuse pour cette recherche sur le patrimoine cinématographique de Safi.</p>
         <button class="btn btn-primary" onclick="location.reload()" data-translate="modal_btn">Remplir un autre questionnaire</button>

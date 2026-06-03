@@ -9,7 +9,10 @@
     <link rel="stylesheet" href="css/dashboard.css">
     <script src="js/chart.umd.js"></script>
 </head>
-<body>
+<body class="admin-page">
+    <div class="film-grain" aria-hidden="true"></div>
+    <div class="spotlight spotlight-left" aria-hidden="true"></div>
+    <div class="spotlight spotlight-right" aria-hidden="true"></div>
 
 <!-- ===================== HEADER ===================== -->
 <header class="app-header">
@@ -79,6 +82,10 @@
                 <p class="dash-subtitle">Enquête sur les salles de cinéma fermées de Safi</p>
             </div>
             <div class="dash-header-right">
+                <button class="dark-toggle-btn dash-dark-toggle" id="darkToggle" onclick="toggleDarkMode()" type="button">
+                    <span class="toggle-icon">🌙</span>
+                    <span>Mode sombre</span>
+                </button>
                 <div id="live-indicator" class="live-indicator">
                     <span class="live-dot"></span>
                     <span class="live-text">CONNEXION...</span>
@@ -175,38 +182,98 @@
         <!-- ===================== TAB 1: STATS ===================== -->
         <div id="tab-stats" class="tab-content active">
 
-            <!-- Metric Cards -->
-            <div class="metrics-grid">
-                <div class="metric-card glass-card" id="mc-total">
-                    <div class="metric-icon">📊</div>
+            <!-- KPI Overview -->
+            <div class="dash-section-label">
+                <span class="dash-section-tag">Vue d'ensemble</span>
+                <h3 class="dash-section-title">Indicateurs clés en temps réel</h3>
+            </div>
+            <div class="metrics-grid metrics-grid-primary">
+                <div class="metric-card glass-card metric-glow" id="mc-total">
+                    <div class="metric-icon-wrap metric-icon-red">🎬</div>
                     <div class="metric-body">
                         <div class="metric-label">Total Questionnaires</div>
                         <div class="metric-value" id="metric-total">0</div>
+                        <div class="metric-trend" id="metric-total-hint">Réponses enregistrées</div>
                     </div>
                 </div>
                 <div class="metric-card glass-card" id="mc-today">
-                    <div class="metric-icon">📅</div>
+                    <div class="metric-icon-wrap metric-icon-gold">📅</div>
                     <div class="metric-body">
                         <div class="metric-label">Aujourd'hui</div>
                         <div class="metric-value" id="metric-today">0</div>
+                        <div class="metric-trend">Soumissions du jour</div>
                     </div>
                 </div>
                 <div class="metric-card glass-card" id="mc-week">
-                    <div class="metric-icon">📆</div>
+                    <div class="metric-icon-wrap metric-icon-amber">📆</div>
                     <div class="metric-body">
                         <div class="metric-label">Cette Semaine</div>
                         <div class="metric-value" id="metric-week">0</div>
+                        <div class="metric-trend">7 derniers jours</div>
                     </div>
                 </div>
                 <div class="metric-card glass-card" id="mc-month">
-                    <div class="metric-icon">🗓️</div>
+                    <div class="metric-icon-wrap metric-icon-burgundy">🗓️</div>
                     <div class="metric-body">
                         <div class="metric-label">Ce Mois</div>
                         <div class="metric-value" id="metric-month">0</div>
+                        <div class="metric-trend">Mois en cours</div>
                     </div>
                 </div>
             </div>
 
+            <div class="metrics-grid metrics-grid-secondary">
+                <div class="metric-card glass-card metric-compact" id="mc-visited">
+                    <div class="metric-body">
+                        <div class="metric-label">Fréquentation passée (Q7)</div>
+                        <div class="metric-value metric-value-sm" id="metric-visited-rate">—</div>
+                        <div class="metric-spark" id="metric-visited-spark"></div>
+                    </div>
+                </div>
+                <div class="metric-card glass-card metric-compact" id="mc-heritage">
+                    <div class="metric-body">
+                        <div class="metric-label">Attachement patrimonial (Q17)</div>
+                        <div class="metric-value metric-value-sm" id="metric-heritage-score">—</div>
+                        <div class="metric-spark" id="metric-heritage-spark"></div>
+                    </div>
+                </div>
+                <div class="metric-card glass-card metric-compact" id="mc-rehab">
+                    <div class="metric-body">
+                        <div class="metric-label">Favorable à la réhabilitation (Q19)</div>
+                        <div class="metric-value metric-value-sm" id="metric-rehab-rate">—</div>
+                        <div class="metric-spark" id="metric-rehab-spark"></div>
+                    </div>
+                </div>
+                <div class="metric-card glass-card metric-compact" id="mc-recontact">
+                    <div class="metric-body">
+                        <div class="metric-label">Accepte un entretien (Q27)</div>
+                        <div class="metric-value metric-value-sm" id="metric-recontact-rate">—</div>
+                        <div class="metric-spark" id="metric-recontact-spark"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insights + Timeline -->
+            <div class="insights-timeline-grid">
+                <div class="insights-panel glass-card" id="insights-panel">
+                    <div class="insights-header">
+                        <span class="insights-badge">Analyse intelligente</span>
+                        <h3 class="chart-title">Synthèse des tendances</h3>
+                    </div>
+                    <ul class="insights-list" id="insights-list">
+                        <li class="insight-item insight-loading">Chargement des insights...</li>
+                    </ul>
+                </div>
+                <div class="chart-card glass-card">
+                    <h3 class="chart-title">📈 Évolution des soumissions</h3>
+                    <div class="chart-container chart-medium"><canvas id="chart-timeline"></canvas></div>
+                </div>
+            </div>
+
+            <div class="dash-section-label">
+                <span class="dash-section-tag">Profil & mémoire</span>
+                <h3 class="dash-section-title">Répartition démographique et fréquentation</h3>
+            </div>
             <!-- Charts Row 1 -->
             <div class="charts-grid">
                 <div class="chart-card glass-card">
@@ -220,6 +287,13 @@
                 <div class="chart-card glass-card">
                     <h3 class="chart-title">Q7. A visité les cinémas</h3>
                     <div class="chart-container"><canvas id="chart-visited"></canvas></div>
+                </div>
+            </div>
+
+            <div class="charts-grid charts-grid-4">
+                <div class="chart-card glass-card">
+                    <h3 class="chart-title">Q5. Niveau d'études</h3>
+                    <div class="chart-container"><canvas id="chart-education"></canvas></div>
                 </div>
             </div>
 
@@ -239,6 +313,22 @@
                 </div>
             </div>
 
+            <div class="dash-section-label">
+                <span class="dash-section-tag">Causes & représentations</span>
+                <h3 class="dash-section-title">Échelles de Likert et perceptions</h3>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card glass-card">
+                    <h3 class="chart-title">Q14. Devenir des salles</h3>
+                    <div class="chart-container chart-medium"><canvas id="chart-q14"></canvas></div>
+                </div>
+                <div class="chart-card glass-card">
+                    <h3 class="chart-title">Q25. Médias et sensibilisation</h3>
+                    <div class="chart-container chart-medium"><canvas id="chart-q25"></canvas></div>
+                </div>
+            </div>
+
             <!-- Likert Q15 -->
             <div class="chart-card glass-card chart-wide">
                 <h3 class="chart-title">Q15. Causes de fermeture (Échelle de Likert)</h3>
@@ -255,6 +345,11 @@
                     <h3 class="chart-title">Q19. Patrimoine et avenir</h3>
                     <div class="chart-container chart-medium"><canvas id="chart-patrimony"></canvas></div>
                 </div>
+            </div>
+
+            <div class="dash-section-label">
+                <span class="dash-section-tag">Avenir & engagement</span>
+                <h3 class="dash-section-title">Valorisation et mobilisation citoyenne</h3>
             </div>
 
             <!-- Q20 + Q21 -->

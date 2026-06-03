@@ -186,5 +186,79 @@
     "q13_table": [],
     "id": 3,
     "submission_date": "2026-06-03T18:24:46.408Z"
+  },
+  {
+    "q1_gender": "homme",
+    "q2_age_group": "50_64",
+    "q4_residence_duration": "naissance",
+    "q5_education_level": "primaire",
+    "q6_profession": "etudiant",
+    "q7_visited_cinema": "oui",
+    "q9_frequency": "une_semaine",
+    "q15_1": "1",
+    "q15_2": "2",
+    "q15_3": "3",
+    "q15_5": "3",
+    "q15_6": "4",
+    "q15_8": "2",
+    "q15_9": "3",
+    "q15_10": "4",
+    "q17_1": "1",
+    "q17_2": "2",
+    "q17_3": "3",
+    "q17_4": "4",
+    "q17_5": "4",
+    "q17_6": "4",
+    "q19_1": "1",
+    "q19_2": "2",
+    "q19_3": "3",
+    "q19_4": "4",
+    "q19_5": "5",
+    "q19_6": "4",
+    "q22_seen_content": "oui",
+    "q24_follow_pages": "non",
+    "q25_1": "2",
+    "q25_2": "3",
+    "q25_3": "5",
+    "q27_recontact": "oui",
+    "q3_neighborhood": "hhhhh",
+    "q11_other": "",
+    "q12_memory": "jjjjj",
+    "q13_text": "hhh",
+    "q16_main_cause": "hhhh",
+    "q18_meaning": "hhh",
+    "q20_other": "",
+    "q26_comments": "hhhh",
+    "q27_contact_details": "hhhh",
+    "q8_periods": [
+      "annees_1980"
+    ],
+    "q10_companions": [
+      "famille"
+    ],
+    "q11_movie_types": [
+      "marocains"
+    ],
+    "q14_what_became": [
+      "demolies"
+    ],
+    "q20_desired_usage": [
+      "cinematheque"
+    ],
+    "q21_support_type": [
+      "benevole"
+    ],
+    "q23_channels": [
+      "tv_radio"
+    ],
+    "q13_table": [
+      {
+        "name": "nh",
+        "location": "",
+        "current_state": ""
+      }
+    ],
+    "id": 4,
+    "submission_date": "2026-06-03T19:42:36.788Z"
   }
 ]

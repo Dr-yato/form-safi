@@ -33,21 +33,36 @@ const LIKERT_COLORS = [
     'rgba(16, 185, 129, 0.9)'
 ];
 
-// Premium color palette
+// Cinema heritage color palette
 const colorPalette = [
-    '#6366f1', '#8b5cf6', '#a78bfa', '#c4b5fd',
-    '#818cf8', '#4f46e5', '#7c3aed', '#5b21b6',
-    '#6d28d9', '#4338ca'
+    '#9d0208', '#370617', '#d4af37', '#e85d04',
+    '#6a040f', '#ffb703', '#bc6c25', '#200f13',
+    '#16a34a', '#dc2626'
 ];
 
 const gradientPairs = [
-    ['#6366f1', '#8b5cf6'],
-    ['#3b82f6', '#6366f1'],
-    ['#06b6d4', '#3b82f6'],
-    ['#10b981', '#06b6d4'],
-    ['#f59e0b', '#ef4444'],
-    ['#ec4899', '#8b5cf6']
+    ['#9d0208', '#370617'],
+    ['#d4af37', '#e85d04'],
+    ['#370617', '#9d0208'],
+    ['#16a34a', '#d4af37'],
+    ['#e85d04', '#ffb703'],
+    ['#6a040f', '#bc6c25']
 ];
+
+const USAGE_LABELS = {
+    cinema: 'Cinéma', cinematheque: 'Cinémathèque', spectacles: 'Spectacles',
+    centre_culturel: 'Centre culturel', mediatheque: 'Médiathèque',
+    coworking: 'Coworking', cafe_culturel: 'Café culturel', musee: 'Musée', autre: 'Autre',
+    concert: 'Spectacles', center: 'Centre culturel', library: 'Médiathèque',
+    cafe: 'Café culturel', museum: 'Musée'
+};
+
+const SUPPORT_LABELS = {
+    frequenter: 'Fréquenter', benevole: 'Bénévolat', souvenirs: 'Partager souvenirs',
+    financier: 'Soutien financier', non: 'Ne souhaite pas',
+    visitor: 'Fréquenter', volunteer: 'Bénévolat', share: 'Partager souvenirs',
+    finance: 'Soutien financier', not_involved: 'Ne souhaite pas'
+};
 
 // ===========================
 //  INITIALIZATION
@@ -57,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (pref === 'on') {
         document.body.classList.add('dark-mode');
     }
+    updateDarkToggleLabel();
     checkAuthentication();
 });
 
@@ -136,6 +152,60 @@ function initDashboard() {
 
     // Setup real-time listener
     setupRealtimeListener();
+
+    // Start background polling for serverless live feed
+    startPolling();
+}
+
+let pollInterval = null;
+
+function startPolling() {
+    if (pollInterval) clearInterval(pollInterval);
+    const isLocalApi = APPS_SCRIPT_URL.startsWith('/') || APPS_SCRIPT_URL.includes('localhost') || APPS_SCRIPT_URL.includes('127.0.0.1');
+    if (isLocalApi) {
+        // Poll the server every 10 seconds
+        pollInterval = setInterval(pollServerForChanges, 10000);
+    }
+}
+
+function pollServerForChanges() {
+    fetch('/api/responses?_t=' + Date.now())
+        .then(res => res.json())
+        .then(resData => {
+            if (resData && resData.status === 'success' && Array.isArray(resData.data)) {
+                const serverResponses = resData.data;
+                
+                // If there are new responses on the server
+                if (serverResponses.length > allResponses.length) {
+                    const existingIds = new Set(allResponses.map(r => r.id));
+                    const newResponses = serverResponses.filter(r => !existingIds.has(r.id));
+                    
+                    // Update state
+                    allResponses = serverResponses;
+                    liveResponseCount = allResponses.length;
+                    
+                    // Display each new response with animation
+                    newResponses.forEach(newResp => {
+                        showNewResponseNotification(newResp);
+                        addToLiveFeed(newResp);
+                    });
+                    
+                    processAndRender();
+                    pulseMetricCards();
+                    
+                    // Sync with localStorage
+                    if (window.RT) {
+                        localStorage.setItem('cineplus_safi_responses', JSON.stringify(allResponses));
+                    }
+                } else if (serverResponses.length < allResponses.length) {
+                    // Responses were cleared/deleted on the server
+                    allResponses = serverResponses;
+                    liveResponseCount = allResponses.length;
+                    processAndRender();
+                }
+            }
+        })
+        .catch(err => console.warn('Error during polling update:', err));
 }
 
 function loadFromRealtime() {
@@ -334,6 +404,8 @@ function pulseMetricCards() {
 function processAndRender() {
     applyFilters();
     updateMetrics();
+    updateSecondaryMetrics();
+    renderInsights();
     renderStatsCharts();
     loadSemanticAnalysis();
     loadResponsesTable();
@@ -366,9 +438,8 @@ function updateMetrics() {
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
     filteredResponses.forEach(r => {
-        if (!r.submission_date) return;
-        const d = new Date(r.submission_date);
-        if (isNaN(d.getTime())) return;
+        const d = getSubmissionDate(r);
+        if (!d) return;
         if (d >= todayStart) today++;
         if (d >= weekStart) week++;
         if (d >= monthStart) month++;
@@ -403,6 +474,223 @@ function animateCounter(elementId, targetValue) {
     requestAnimationFrame(step);
 }
 
+
+function pct(n, total) {
+    return total > 0 ? Math.round((n / total) * 100) : 0;
+}
+
+function avgLikert(dataset, keys) {
+    let sum = 0, count = 0;
+    dataset.forEach(r => {
+        keys.forEach(k => {
+            const v = parseInt(r[k], 10);
+            if (v >= 1 && v <= 5) { sum += v; count++; }
+        });
+    });
+    return count > 0 ? (sum / count) : 0;
+}
+
+function setMetricText(id, text) {
+    const el = document.getElementById(id);
+    if (el) el.textContent = text;
+}
+
+function setSparkBar(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.style.setProperty('--spark-pct', `${Math.min(100, Math.max(0, value))}%`);
+}
+
+function updateSecondaryMetrics() {
+    const total = filteredResponses.length;
+    if (total === 0) {
+        ['metric-visited-rate', 'metric-heritage-score', 'metric-rehab-rate', 'metric-recontact-rate'].forEach(id => setMetricText(id, '—'));
+        ['metric-visited-spark', 'metric-heritage-spark', 'metric-rehab-spark', 'metric-recontact-spark'].forEach(id => setSparkBar(id, 0));
+        return;
+    }
+
+    const visitedYes = filteredResponses.filter(r => r.q7_visited_cinema === 'oui').length;
+    const visitedPct = pct(visitedYes, total);
+    setMetricText('metric-visited-rate', `${visitedPct}%`);
+    setSparkBar('metric-visited-spark', visitedPct);
+
+    const heritageAvg = avgLikert(filteredResponses, ['q17_1','q17_2','q17_4','q17_5']);
+    const heritagePct = Math.round((heritageAvg / 5) * 100);
+    setMetricText('metric-heritage-score', `${heritageAvg.toFixed(1)}/5`);
+    setSparkBar('metric-heritage-spark', heritagePct);
+
+    const rehabPositive = filteredResponses.filter(r => {
+        const v2 = parseInt(r.q19_2, 10);
+        const v5 = parseInt(r.q19_5, 10);
+        return (v2 >= 4) || (v5 >= 4);
+    }).length;
+    const rehabPct = pct(rehabPositive, total);
+    setMetricText('metric-rehab-rate', `${rehabPct}%`);
+    setSparkBar('metric-rehab-spark', rehabPct);
+
+    const recontactYes = filteredResponses.filter(r => r.q27_recontact === 'oui').length;
+    const recontactPct = pct(recontactYes, total);
+    setMetricText('metric-recontact-rate', `${recontactPct}%`);
+    setSparkBar('metric-recontact-spark', recontactPct);
+}
+
+function renderInsights() {
+    const list = document.getElementById('insights-list');
+    if (!list) return;
+
+    const total = filteredResponses.length;
+    if (total === 0) {
+        list.innerHTML = '<li class="insight-item insight-empty">Aucune réponse pour générer une synthèse. Soumettez un questionnaire pour alimenter le dashboard.</li>';
+        return;
+    }
+
+    const insights = [];
+    const visitedPct = pct(filteredResponses.filter(r => r.q7_visited_cinema === 'oui').length, total);
+    insights.push(`<strong>${visitedPct}%</strong> des répondants ont fréquenté les cinémas de Safi — mémoire directe du patrimoine.`);
+
+    const topCause = getTopLikertStatement({
+        q15_2: 'Internet / streaming', q15_1: 'TV satellite', q15_10: 'Changement d\'habitudes',
+        q15_9: 'Manque de soutien public', q15_5: 'Salles vétustes'
+    }, filteredResponses);
+    if (topCause) insights.push(`Cause de fermeture la plus citée : <strong>${topCause.label}</strong> (score moyen ${topCause.avg}/5).`);
+
+    const usageCounts = countMultiField(filteredResponses, 'q20_desired_usage');
+    const topUsage = Object.entries(usageCounts).sort((a,b) => b[1]-a[1])[0];
+    if (topUsage) insights.push(`Usage souhaité n°1 : <strong>${USAGE_LABELS[topUsage[0]] || topUsage[0]}</strong> (${pct(topUsage[1], total)}% des répondants).`);
+
+    const heritageAvg = avgLikert(filteredResponses, ['q17_1','q17_2','q17_5']);
+    if (heritageAvg >= 3.5) insights.push(`Fort attachement émotionnel : score moyen de <strong>${heritageAvg.toFixed(1)}/5</strong> sur l'identité et la mémoire des salles.`);
+    else insights.push(`Attachement modéré au patrimoine cinématographique (score moyen <strong>${heritageAvg.toFixed(1)}/5</strong>).`);
+
+    const women = filteredResponses.filter(r => r.q1_gender === 'femme').length;
+    const men = filteredResponses.filter(r => r.q1_gender === 'homme').length;
+    if (women + men > 0) {
+        const dom = women >= men ? 'femmes' : 'hommes';
+        insights.push(`Profil majoritaire : <strong>${dom}</strong> (${pct(Math.max(women, men), women + men)}% du panel filtré).`);
+    }
+
+    list.innerHTML = insights.map((text, i) => `<li class="insight-item" style="animation-delay:${i * 0.08}s"><span class="insight-dot"></span><span>${text}</span></li>`).join('');
+}
+
+function getTopLikertStatement(dict, dataset) {
+    let best = null;
+    Object.keys(dict).forEach(key => {
+        const avg = avgLikert(dataset, [key]);
+        if (avg > 0 && (!best || avg > best.avg)) best = { label: dict[key], avg: avg.toFixed(1) };
+    });
+    return best;
+}
+
+
+function getSubmissionDate(record) {
+    if (!record) return null;
+    const raw = record.submission_date || record.submissionDate || record.date || record.created_at;
+    if (!raw) return null;
+    const d = new Date(raw);
+    return isNaN(d.getTime()) ? null : d;
+}
+
+function safeChartRender(label, fn) {
+    try {
+        fn();
+    } catch (err) {
+        console.error(`Chart render failed (${label}):`, err);
+    }
+}
+
+function renderTimelineChart() {
+    const canvas = document.getElementById('chart-timeline');
+    if (!canvas || !window.Chart) return;
+    destroyChart('chart-timeline');
+
+    const timelineCard = canvas.closest('.chart-card');
+    if (timelineCard) timelineCard.classList.remove('chart-empty');
+
+    const counts = {};
+    filteredResponses.forEach(r => {
+        const d = getSubmissionDate(r);
+        if (!d) return;
+        const key = d.toISOString().slice(0, 10);
+        counts[key] = (counts[key] || 0) + 1;
+    });
+
+    const dateKeys = Object.keys(counts).sort();
+    let labels = dateKeys;
+    let values = dateKeys.map(k => counts[k]);
+
+    if (labels.length === 0) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        labels = [];
+        values = [];
+        for (let i = 13; i >= 0; i--) {
+            const d = new Date(today);
+            d.setDate(d.getDate() - i);
+            labels.push(d.toISOString().slice(0, 10));
+            values.push(0);
+        }
+    } else if (labels.length === 1) {
+        const only = new Date(labels[0] + 'T12:00:00');
+        const prev = new Date(only);
+        prev.setDate(prev.getDate() - 1);
+        labels = [prev.toISOString().slice(0, 10), labels[0]];
+        values = [0, values[0]];
+    }
+
+    const ctx = canvas.getContext('2d');
+    const chartHeight = canvas.parentElement?.clientHeight || 300;
+    const grad = ctx.createLinearGradient(0, 0, 0, chartHeight);
+    grad.addColorStop(0, 'rgba(157, 2, 8, 0.35)');
+    grad.addColorStop(1, 'rgba(157, 2, 8, 0.02)');
+
+    chartInstances['chart-timeline'] = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels.map(d => new Date(d + 'T12:00:00').toLocaleDateString('fr-FR', { day: '2-digit', month: 'short' })),
+            datasets: [{
+                label: 'Soumissions',
+                data: values,
+                borderColor: getThemeColor('--dash-primary', '#9d0208'),
+                backgroundColor: grad,
+                fill: true,
+                tension: 0.35,
+                pointBackgroundColor: getThemeColor('--dash-primary-light', '#d4af37'),
+                pointBorderColor: '#fff',
+                pointRadius: values.length <= 2 ? 6 : 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    suggestedMax: Math.max(2, ...values),
+                    ticks: { precision: 0, color: getThemeColor('--dash-text-muted', '#7d6b6f') },
+                    grid: { color: document.body.classList.contains('dark-mode') ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)' }
+                },
+                x: {
+                    ticks: { color: getThemeColor('--dash-text-muted', '#7d6b6f'), maxRotation: 45, minRotation: 0 },
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+
+    requestAnimationFrame(() => {
+        if (chartInstances['chart-timeline']) chartInstances['chart-timeline'].resize();
+    });
+}
+
+function updateDarkToggleLabel() {
+    const isDark = document.body.classList.contains('dark-mode');
+    const iconEl = document.querySelector('#darkToggle .toggle-icon');
+    const labelEl = document.querySelector('#darkToggle span:last-child');
+    if (iconEl) iconEl.textContent = isDark ? '☀️' : '🌙';
+    if (labelEl) labelEl.textContent = isDark ? 'Mode clair' : 'Mode sombre';
+}
+
 function resetFilters() {
     document.getElementById('filter-gender').value = '';
     document.getElementById('filter-age').value = '';
@@ -414,6 +702,8 @@ function resetFilters() {
 function loadAnalytics() {
     applyFilters();
     updateMetrics();
+    updateSecondaryMetrics();
+    renderInsights();
     renderStatsCharts();
     loadSemanticAnalysis();
     if (activeTab === 'tab-responses') {
@@ -457,7 +747,13 @@ function destroyChart(id) {
 function renderStatsCharts() {
     Object.keys(chartInstances).forEach(id => destroyChart(id));
 
-    if (filteredResponses.length === 0) return;
+    if (filteredResponses.length === 0) {
+        showChartsEmptyState(true);
+        renderTimelineChart();
+        return;
+    }
+    showChartsEmptyState(false);
+    renderTimelineChart();
 
     // Chart.js global defaults
     if (window.Chart) {
@@ -555,32 +851,63 @@ function renderStatsCharts() {
 
     // --- Q20 Usage ---
     const usageCounts = countMultiField(filteredResponses, 'q20_desired_usage');
-    const usageLabelsMap = {
-        'cinema': 'Cinéma', 'cinematheque': 'Cinémathèque', 'concert': 'Spectacles',
-        'center': 'Centre culturel', 'library': 'Médiathèque',
-        'coworking': 'Coworking', 'cafe': 'Café culturel', 'museum': 'Musée'
-    };
     renderHorizontalBar('chart-desired-usage',
-        Object.keys(usageCounts).map(k => usageLabelsMap[k] || k),
+        Object.keys(usageCounts).map(k => USAGE_LABELS[k] || k),
         Object.values(usageCounts), filteredResponses.length
     );
 
     // --- Q21 Support ---
     const supportCounts = countMultiField(filteredResponses, 'q21_support_type');
-    const supportLabelsMap = {
-        'visitor': 'Fréquenter', 'volunteer': 'Bénévolat', 'share': 'Partager souvenirs',
-        'finance': 'Soutien financier', 'not_involved': 'Non impliqué'
-    };
     renderHorizontalBar('chart-support-type',
-        Object.keys(supportCounts).map(k => supportLabelsMap[k] || k),
+        Object.keys(supportCounts).map(k => SUPPORT_LABELS[k] || k),
         Object.values(supportCounts), filteredResponses.length
     );
+
+    // --- Q5 Education ---
+    const eduCounts = countField(filteredResponses, 'q5_education_level');
+    const eduLabelsMap = {
+        primaire: 'Primaire', college: 'Collège', lycee: 'Lycée',
+        sup_bac4: 'Bac+2→4', sup_bac5: 'Bac+5+'
+    };
+    renderDoughnutChart('chart-education',
+        Object.keys(eduCounts).map(k => eduLabelsMap[k] || k),
+        Object.values(eduCounts),
+        colorPalette.slice(0, 5)
+    );
+
+    // --- Q14 What became ---
+    const q14Counts = countMultiField(filteredResponses, 'q14_what_became');
+    const q14LabelsMap = {
+        abandonnees: 'Abandonnées', commerces: 'Commerces', entrepots: 'Entrepôts',
+        demolies: 'Démolies', reaffectees: 'Usage culturel', ne_sais_pas: 'Ne sait pas'
+    };
+    renderHorizontalBar('chart-q14',
+        Object.keys(q14Counts).map(k => q14LabelsMap[k] || k),
+        Object.values(q14Counts), filteredResponses.length
+    );
+
+    // --- Q25 Media Likert ---
+    const q25S = {
+        q25_1: 'Attention médias locaux', q25_2: 'Réseaux sociaux utiles', q25_3: 'Intérêt documentaire'
+    };
+    safeChartRender('chart-q25', () => renderLikertChart('chart-q25', q25S, filteredResponses));
+
+    renderTimelineChart();
 }
 
 // ─── Chart Helpers ───────────────────────────────────────────────────────────
 
 function getThemeColor(variableName, fallback) {
     return getComputedStyle(document.body).getPropertyValue(variableName).trim() || fallback;
+}
+
+
+function showChartsEmptyState(show) {
+    document.querySelectorAll('.chart-container canvas').forEach(c => {
+        if (c.id === 'chart-timeline') return;
+        const card = c.closest('.chart-card');
+        if (card) card.classList.toggle('chart-empty', show);
+    });
 }
 
 function renderDoughnutChart(canvasId, labels, data, colors) {
@@ -896,9 +1223,8 @@ function renderWordCloud(frequencies) {
         const fontSize = 14 + ((item.value / maxVal) * 26);
         span.style.fontSize = `${fontSize}px`;
 
-        const hue = 240 + ((i / frequencies.length) * 60);
-        const lightness = 65 - ((item.value / maxVal) * 25);
-        span.style.color = `hsl(${hue}, 75%, ${lightness}%)`;
+        const palette = ['#9d0208', '#370617', '#d4af37', '#e85d04', '#6a040f', '#16a34a'];
+        span.style.color = palette[i % palette.length];
         span.style.fontWeight = item.value > maxVal * 0.5 ? '700' : '500';
         span.title = `Fréquence: ${item.value}`;
 
@@ -1257,8 +1583,7 @@ function toggleDarkMode() {
     document.body.classList.toggle('dark-mode');
     const isDark = document.body.classList.contains('dark-mode');
     localStorage.setItem('darkMode', isDark ? 'on' : 'off');
-    
-    // Re-render statistics charts to update theme colors
+    updateDarkToggleLabel();
     if (typeof filteredResponses !== 'undefined' && filteredResponses.length > 0) {
         renderStatsCharts();
     }
@@ -1278,8 +1603,8 @@ function getMockupData() {
     const frequencies = ['plusieurs_semaine', 'une_semaine', 'une_deux_mois', 'quelques_an', 'rarement'];
     const companions = ['seul', 'famille', 'amis', 'couple', 'voisins'];
     const movies = ['marocains', 'egyptiens', 'indiens', 'americains', 'action'];
-    const usages = ['cinema', 'cinematheque', 'concert', 'center', 'library', 'coworking', 'cafe', 'museum'];
-    const supports = ['visitor', 'volunteer', 'share', 'finance', 'not_involved'];
+    const usages = ['cinema', 'cinematheque', 'spectacles', 'centre_culturel', 'mediatheque', 'coworking', 'cafe_culturel', 'musee'];
+    const supports = ['frequenter', 'benevole', 'souvenirs', 'financier', 'non'];
     const memories = [
         "Je me souviens des films de Bruce Lee au Roxy, c'était magique.",
         "Les séances du dimanche avec mon père au cinéma Atlantide restent gravées dans ma mémoire.",

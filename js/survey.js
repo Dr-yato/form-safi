@@ -449,13 +449,198 @@ const translations = {
 document.addEventListener('DOMContentLoaded', () => {
     loadDarkModePreference();
     setupConditionalLogic();
+    toggleQ7Conditional();
+    toggleQ22Conditional();
+    toggleQ27Conditional();
     updateProgress();
     switchLanguage('fr');
 });
 
 // ===========================
-//  LANGUAGE SWITCHING
+//  LANGUAGE SWITCHING & MAPPING
 // ===========================
+const TRANSLATION_KEY_MAP = {
+    'progress_section': 'section_indicator',
+    'progress_percent': 'percent_indicator',
+    'likert_statement': 'tbl_col_statement',
+    'modal_title': 'modal_success_title',
+    'modal_text': 'modal_success_desc',
+    'modal_btn': 'btn_reload',
+    'q11_other_placeholder': 'specify_placeholder',
+    
+    // Q1
+    'q1_label': 'q1_title',
+    'q1_opt1': 'gender_female',
+    'q1_opt2': 'gender_male',
+    
+    // Q2
+    'q2_label': 'q2_title',
+    'q2_opt1': 'age_under18',
+    'q2_opt2': 'age_18_24',
+    'q2_opt3': 'age_25_34',
+    'q2_opt4': 'age_35_49',
+    'q2_opt5': 'age_50_64',
+    'q2_opt6': 'age_over65',
+    
+    // Q3
+    'q3_label': 'q3_title',
+    
+    // Q4
+    'q4_label': 'q4_title',
+    'q4_opt1': 'dur_birth',
+    'q4_opt2': 'dur_over20',
+    'q4_opt3': 'dur_10_20',
+    'q4_opt4': 'dur_5_10',
+    'q4_opt5': 'dur_under5',
+    
+    // Q5
+    'q5_label': 'q5_title',
+    'q5_opt1': 'edu_none',
+    'q5_opt2': 'edu_middle',
+    'q5_opt3': 'edu_high',
+    'q5_opt4': 'edu_uni_low',
+    'q5_opt5': 'edu_uni_high',
+    
+    // Q6
+    'q6_label': 'q6_title',
+    'q6_opt1': 'prof_student',
+    'q6_opt2': 'prof_private',
+    'q6_opt3': 'prof_public',
+    'q6_opt4': 'prof_independent',
+    'q6_opt5': 'prof_merchant',
+    'q6_opt6': 'prof_unemployed',
+    'q6_opt7': 'prof_retired',
+    'q6_opt8': 'prof_housewife',
+    
+    // Q7
+    'q7_label': 'q7_title',
+    'q7_opt1': 'yes',
+    'q7_opt2': 'no',
+    
+    // Q8
+    'q8_label': 'q8_title',
+    'q8_opt1': 'p_before1980',
+    'q8_opt2': 'p_1980s',
+    'q8_opt3': 'p_1990s',
+    'q8_opt4': 'p_2000s',
+    'q8_opt5': 'p_2010s',
+    
+    // Q9
+    'q9_label': 'q9_title',
+    'q9_opt1': 'f_several_week',
+    'q9_opt2': 'f_once_week',
+    'q9_opt3': 'f_once_month',
+    'q9_opt4': 'f_few_year',
+    'q9_opt5': 'f_rarely',
+    
+    // Q10
+    'q10_label': 'q10_title',
+    'q10_opt1': 'c_alone',
+    'q10_opt2': 'c_family',
+    'q10_opt3': 'c_friends',
+    'q10_opt4': 'c_couple',
+    'q10_opt5': 'c_neighbors',
+    
+    // Q11
+    'q11_label': 'q11_title',
+    'q11_opt1': 'm_moroccan',
+    'q11_opt2': 'm_egyptian',
+    'q11_opt3': 'm_indian',
+    'q11_opt4': 'm_western',
+    'q11_opt5': 'm_action',
+    'q11_opt6': 'other',
+    
+    // Q12
+    'q12_label': 'q12_title',
+    
+    // Q13
+    'q13_label': 'q13_title',
+    'q13_col1': 'tbl_col_name',
+    'q13_col2': 'tbl_col_loc',
+    'q13_col3': 'tbl_col_state',
+    'q13_add_row': 'btn_add_cinema',
+    
+    // Q14
+    'q14_label': 'q14_title',
+    'q14_opt1': 'b_abandoned',
+    'q14_opt2': 'b_shops',
+    'q14_opt3': 'b_parking',
+    'q14_opt4': 'b_demolished',
+    'q14_opt5': 'b_cultural',
+    'q14_opt6': 'dont_know',
+    
+    // Q15
+    'q15_label': 'q15_title',
+    'q15_s1': 'q15_1_text',
+    'q15_s2': 'q15_2_text',
+    'q15_s3': 'q15_3_text',
+    'q15_s4': 'q15_4_text',
+    'q15_s5': 'q15_5_text',
+    'q15_s6': 'q15_6_text',
+    'q15_s7': 'q15_7_text',
+    'q15_s8': 'q15_8_text',
+    'q15_s9': 'q15_9_text',
+    'q15_s10': 'q15_10_text',
+    
+    // Q16
+    'q16_label': 'q16_title',
+    
+    // Q17
+    'q17_label': 'q17_title',
+    'q17_s1': 'q17_1_text',
+    'q17_s2': 'q17_2_text',
+    'q17_s3': 'q17_3_text',
+    'q17_s4': 'q17_4_text',
+    'q17_s5': 'q17_5_text',
+    'q17_s6': 'q17_6_text',
+    
+    // Q18
+    'q18_label': 'q18_title',
+    
+    // Q19
+    'q19_label': 'q19_title',
+    'q19_s1': 'q19_1_text',
+    'q19_s2': 'q19_2_text',
+    'q19_s3': 'q19_3_text',
+    'q19_s4': 'q19_4_text',
+    'q19_s5': 'q19_5_text',
+    'q19_s6': 'q19_6_text',
+    
+    // Q20
+    'q20_label': 'q20_title',
+    
+    // Q21
+    'q21_label': 'q21_title',
+    
+    // Q22
+    'q22_label': 'q22_title',
+    'q22_opt1': 'yes',
+    'q22_opt2': 'no',
+    
+    // Q23
+    'q23_label': 'q23_title',
+    
+    // Q24
+    'q24_label': 'q24_title',
+    'q24_opt1': 'yes',
+    'q24_opt2': 'no',
+    
+    // Q25
+    'q25_label': 'q25_title',
+    'q25_s1': 'q25_1_text',
+    'q25_s2': 'q25_2_text',
+    'q25_s3': 'q25_3_text',
+    
+    // Q26
+    'q26_label': 'q26_title',
+    
+    // Q27
+    'q27_label': 'q27_title',
+    'q27_opt1': 'yes',
+    'q27_opt2': 'no',
+    'q27_contact_label': 'q27_contact_title'
+};
+
 function switchLanguage(lang) {
     if (!translations[lang]) return;
     currentLanguage = lang;
@@ -469,14 +654,20 @@ function switchLanguage(lang) {
     }
 
     document.querySelectorAll('[data-translate]').forEach(el => {
-        const key = el.getAttribute('data-translate');
+        let key = el.getAttribute('data-translate');
+        if (TRANSLATION_KEY_MAP[key]) {
+            key = TRANSLATION_KEY_MAP[key];
+        }
         if (translations[lang][key]) {
             el.textContent = translations[lang][key];
         }
     });
 
     document.querySelectorAll('[data-translate-placeholder]').forEach(el => {
-        const key = el.getAttribute('data-translate-placeholder');
+        let key = el.getAttribute('data-translate-placeholder');
+        if (TRANSLATION_KEY_MAP[key]) {
+            key = TRANSLATION_KEY_MAP[key];
+        }
         if (translations[lang][key]) {
             el.setAttribute('placeholder', translations[lang][key]);
         }
@@ -489,10 +680,105 @@ function switchLanguage(lang) {
 // ===========================
 //  NAVIGATION
 // ===========================
+
+function isYesValue(value) {
+    return value === 'oui' || value === 'Oui' || value === 'yes';
+}
+
+function isNoValue(value) {
+    return value === 'non' || value === 'Non' || value === 'no';
+}
+
+function getQ7Answer() {
+    return document.querySelector('input[name="q7_visited_cinema"]:checked')?.value;
+}
+
+function toggleQ7Conditional() {
+    const wrapper = document.getElementById('q7_conditional_wrapper');
+    if (!wrapper) return;
+    const q7Val = getQ7Answer();
+    if (isYesValue(q7Val)) {
+        wrapper.style.display = 'block';
+    } else {
+        wrapper.style.display = 'none';
+        if (isNoValue(q7Val)) {
+            clearInputsInside(wrapper);
+        }
+    }
+    updateProgress();
+}
+
+function toggleQ22Conditional() {
+    const wrapper = document.getElementById('q23_conditional_wrapper');
+    if (!wrapper) return;
+    const val = document.querySelector('input[name="q22_seen_content"]:checked')?.value;
+    if (isYesValue(val)) {
+        wrapper.style.display = 'block';
+    } else {
+        wrapper.style.display = 'none';
+        if (isNoValue(val)) {
+            clearInputsInside(wrapper);
+        }
+    }
+}
+
+function toggleQ27Conditional() {
+    const wrapper = document.getElementById('q27_conditional_wrapper');
+    if (!wrapper) return;
+    const val = document.querySelector('input[name="q27_recontact"]:checked')?.value;
+    if (isYesValue(val)) {
+        wrapper.style.display = 'block';
+    } else {
+        wrapper.style.display = 'none';
+        if (isNoValue(val)) {
+            clearInputsInside(wrapper);
+        }
+    }
+}
+
+function toggleOtherField(wrapperId, checkbox) {
+    const wrapper = document.getElementById(wrapperId);
+    if (!wrapper) return;
+    wrapper.style.display = checkbox.checked ? 'block' : 'none';
+    if (!checkbox.checked) {
+        const input = wrapper.querySelector('input, textarea');
+        if (input) input.value = '';
+    }
+}
+
 function getActiveSections() {
-    const q7Val = document.querySelector('input[name="q7_visited_cinema"]:checked')?.value;
-    if (q7Val === 'Non') return ['A', 'D', 'E', 'F', 'G', 'H'];
+    const q7Val = getQ7Answer();
+    if (isNoValue(q7Val)) {
+        // Q7 = Non: keep section B (Q7 only), skip section C, jump to D after B
+        return ['A', 'B', 'D', 'E', 'F', 'G', 'H'];
+    }
     return sections;
+}
+
+
+function updateStepper() {
+    const stepper = document.getElementById('sectionStepper');
+    if (!stepper) return;
+
+    const activeSections = getActiveSections();
+    const currentSection = sections[currentSectionIndex];
+    const activeIndex = activeSections.indexOf(currentSection);
+
+    stepper.querySelectorAll('.step-pill').forEach(pill => {
+        const step = pill.getAttribute('data-step');
+        pill.classList.remove('active', 'done', 'skipped');
+
+        if (!activeSections.includes(step)) {
+            pill.classList.add('skipped');
+        } else {
+            const stepIndex = activeSections.indexOf(step);
+            if (step === currentSection) {
+                pill.classList.add('active');
+            } else if (stepIndex < activeIndex) {
+                pill.classList.add('done');
+            }
+        }
+    });
 }
 
 function updateProgress() {
@@ -509,6 +795,7 @@ function updateProgress() {
     if (bar) bar.style.width = `${pct}%`;
     if (pctInd) pctInd.textContent = translations[currentLanguage]['percent_indicator'].replace('{pct}', pct);
     if (secInd) secInd.textContent = translations[currentLanguage]['section_indicator'].replace('{num}', activeIndex + 1).replace('{total}', total);
+    updateStepper();
 }
 
 function navigateSection(direction) {
@@ -571,44 +858,15 @@ function validateSection(sectionLetter) {
 //  CONDITIONAL LOGIC
 // ===========================
 function setupConditionalLogic() {
-    // Q7 skip logic
+    // Q7, Q22, Q27 conditional logic (inline onchange + listeners)
     document.querySelectorAll('input[name="q7_visited_cinema"]').forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            const wrapper = document.getElementById('q7_conditional_wrapper');
-            if (e.target.value === 'Non') {
-                wrapper.style.display = 'none';
-                clearInputsInside(wrapper);
-            } else {
-                wrapper.style.display = 'block';
-            }
-            updateProgress();
-        });
+        radio.addEventListener('change', toggleQ7Conditional);
     });
-
-    // Q22 skip logic
     document.querySelectorAll('input[name="q22_seen_content"]').forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            const wrapper = document.getElementById('q23_conditional_wrapper');
-            if (e.target.value === 'Non') {
-                wrapper.style.display = 'none';
-                clearInputsInside(wrapper);
-            } else {
-                wrapper.style.display = 'block';
-            }
-        });
+        radio.addEventListener('change', toggleQ22Conditional);
     });
-
-    // Q27 contact logic
     document.querySelectorAll('input[name="q27_recontact"]').forEach(radio => {
-        radio.addEventListener('change', (e) => {
-            const wrapper = document.getElementById('q27_conditional_wrapper');
-            if (e.target.value === 'Oui') {
-                wrapper.style.display = 'block';
-            } else {
-                wrapper.style.display = 'none';
-                clearInputsInside(wrapper);
-            }
-        });
+        radio.addEventListener('change', toggleQ27Conditional);
     });
 
     // "Other" checkbox auto-check
@@ -637,9 +895,17 @@ function addCinemaRow() {
         <td><input type="text" class="form-input row-cinema-name" placeholder="${translations[currentLanguage]['tbl_ex_name']}"></td>
         <td><input type="text" class="form-input row-cinema-loc" placeholder="${translations[currentLanguage]['tbl_ex_loc']}"></td>
         <td><input type="text" class="form-input row-cinema-state" placeholder="${translations[currentLanguage]['tbl_ex_state']}"></td>
-        <td style="text-align:center;"><button type="button" class="btn-icon" onclick="removeCinemaRow(this)">&times;</button></td>
+        <td style="text-align:center;"><button type="button" class="btn-icon" onclick="removeTableRow(this)">&times;</button></td>
     `;
     tbody.appendChild(tr);
+}
+
+function addTableRow(tableId) {
+    if (tableId === 'q13_table') addCinemaRow();
+}
+
+function removeTableRow(btn) {
+    removeCinemaRow(btn);
 }
 
 function removeCinemaRow(btn) {
