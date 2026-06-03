@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="fr" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enquête — Salles de cinéma fermées de Safi</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===================== HEADER ===================== -->
+<header class="app-header">
+    <div class="header-container">
+        <img src="images/logo_fac.png" alt="Logo Faculté" class="univ-logo">
+        <div class="logo-block">
+            <span class="maroc-seal" data-translate="header_univ">Université Cadi Ayyad</span>
+            <span class="university-name" data-translate="header_fac">Faculté Polydisciplinaire de Safi</span>
+            <span class="speciality" data-translate="header_master">Master CMIC : Communication, Médias et Industries Créatives</span>
+        </div>
+        <img src="images/logo_master.png" alt="Logo Master" class="master-logo">
+        <div class="researcher-badge">
+            <span class="badge-label" data-translate="header_researcher_label">Étudiant chercheur</span>
+            <span class="badge-name">BOUBAROUD Karim</span>
+            <span class="badge-enc">
+                <span data-translate="header_enc_label">Encadrant :</span> <strong>Mr. Rachid Naim</strong>
+            </span>
+        </div>
+        <nav class="header-nav">
+            <a href="index.html" class="active">Formulaire d'enquête</a>
+            <a href="admin.html">Administration</a>
+        </nav>
+    </div>
+</header>
+
+<!-- ===================== MAIN ===================== -->
+<main class="app-main">
+
+    <!-- Progress bar -->
+    <div class="survey-progress-wrapper glass-card">
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+        <div class="progress-text">
+            <span id="sectionIndicator" data-translate="progress_section">Section 1 sur 8</span>
+            <span id="percentIndicator" data-translate="progress_percent">0% Complété</span>
+        </div>
+    </div>
+
+    <!-- Main survey card -->
+    <div class="glass-card survey-card">
+
+        <!-- Controls row -->
+        <div class="survey-controls-row">
+            <div class="lang-selector">
+                <label for="lang-select">🌐 Langue / Language / اللغة :</label>
+                <select id="lang-select" class="form-select" onchange="switchLanguage(this.value)">
+                    <option value="fr">Français</option>
+                    <option value="ar">العربية</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+            <button class="dark-toggle-btn" id="darkToggle" onclick="toggleDarkMode()">
+                <span class="toggle-icon">🌙</span>
+                <span data-translate="dark_mode_label">Mode sombre</span>
+            </button>
+        </div>
+
+        <!-- Survey intro -->
+        <div class="survey-intro">
+            <div class="cinema-banner-wrapper">
+                <img src="images/cinema_banner.png" alt="Patrimoine Cinémas Safi" class="cinema-banner-img">
+                <div class="cinema-banner-overlay"></div>
+            </div>
+            <h2 id="survey-title" data-translate="survey_title">Le patrimoine des salles de cinéma fermées de la ville de Safi : mémoire, représentations et perspectives de valorisation</h2>
+            <p id="survey-desc" data-translate="survey_desc">Dans le cadre d'un mémoire de fin d'études du Master CMIC (Communication, Médias et Industries Créatives) à la Faculté Polydisciplinaire de Safi, nous réalisons cette enquête sur les anciennes salles de cinéma de la ville de Safi. Votre participation est précieuse et vos réponses resteront strictement anonymes et confidentielles. Le questionnaire prend environ 10 à 15 minutes. Merci de votre contribution !</p>
+        </div>
+
+        <!-- ===================== FORM ===================== -->
+        <form id="surveyForm" onsubmit="handleFormSubmit(event)">
+
+            <!-- ========== SECTION A — Profil du répondant ========== -->
+            <div class="survey-section active" data-section="A">
+                <h3 class="section-title" data-translate="section_a_title">A – Profil du répondant</h3>
+
+                <!-- Q1 — Genre -->
+                <fieldset class="form-group">
+                    <legend class="form-label" data-translate="q1_label">Q1. Vous êtes :</legend>
+                    <div class="choices-list">
+                        <div class="choice-item">
+                            <input type="radio" name="q1_gender" id="q1_1" value="femme" required>
+                            <label for="q1_1" data-translate="q1_opt1">Une femme</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q1_gender" id="q1_2" value="homme">
+                            <label for="q1_2" data-translate="q1_opt2">Un homme</label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Q2 — Tranche d'âge -->
+                <fieldset class="form-group">
+                    <legend class="form-label" data-translate="q2_label">Q2. Quelle est votre tranche d'âge ?</legend>
+                    <div class="choices-list">
+                        <div class="choice-item">
+                            <input type="radio" name="q2_age_group" id="q2_1" value="moins_18" required>
+                            <label for="q2_1" data-translate="q2_opt1">Moins de 18 ans</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q2_age_group" id="q2_2" value="18_24">
+                            <label for="q2_2" data-translate="q2_opt2">18–24 ans</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q2_age_group" id="q2_3" value="25_34">
+                            <label for="q2_3" data-translate="q2_opt3">25–34 ans</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q2_age_group" id="q2_4" value="35_49">
+                            <label for="q2_4" data-translate="q2_opt4">35–49 ans</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q2_age_group" id="q2_5" value="50_64">
+                            <label for="q2_5" data-translate="q2_opt5">50–64 ans</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q2_age_group" id="q2_6" value="65_plus">
+                            <label for="q2_6" data-translate="q2_opt6">65 ans et plus</label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Q3 — Quartier -->
+                <div class="form-group">
+                    <label for="q3_neighborhood" class="form-label" data-translate="q3_label">Q3. Dans quel quartier de Safi résidez-vous (ou avez-vous résidé) ?</label>
+                    <input type="text" name="q3_neighborhood" id="q3_neighborhood" class="form-input" data-translate-placeholder="q3_placeholder" placeholder="Votre quartier...">
+                </div>
+
+                <!-- Q4 — Durée de résidence -->
+                <fieldset class="form-group">
+                    <legend class="form-label" data-translate="q4_label">Q4. Depuis combien de temps habitez-vous (ou avez-vous habité) à Safi ?</legend>
+                    <div class="choices-list">
+                        <div class="choice-item">
+                            <input type="radio" name="q4_residence_duration" id="q4_1" value="naissance" required>
+                            <label for="q4_1" data-translate="q4_opt1">Depuis ma naissance</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q4_residence_duration" id="q4_2" value="plus_20">
+                            <label for="q4_2" data-translate="q4_opt2">Plus de 20 ans</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q4_residence_duration" id="q4_3" value="10_20">
+                            <label for="q4_3" data-translate="q4_opt3">Entre 10 et 20 ans</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q4_residence_duration" id="q4_4" value="5_10">
+                            <label for="q4_4" data-translate="q4_opt4">Entre 5 et 10 ans</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q4_residence_duration" id="q4_5" value="moins_5">
+                            <label for="q4_5" data-translate="q4_opt5">Moins de 5 ans</label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Q5 — Niveau d'études -->
+                <fieldset class="form-group">
+                    <legend class="form-label" data-translate="q5_label">Q5. Quel est votre niveau d'études ?</legend>
+                    <div class="choices-list">
+                        <div class="choice-item">
+                            <input type="radio" name="q5_education_level" id="q5_1" value="primaire" required>
+                            <label for="q5_1" data-translate="q5_opt1">Sans scolarité/primaire</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q5_education_level" id="q5_2" value="college">
+                            <label for="q5_2" data-translate="q5_opt2">Collège</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q5_education_level" id="q5_3" value="lycee">
+                            <label for="q5_3" data-translate="q5_opt3">Lycée/baccalauréat</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q5_education_level" id="q5_4" value="sup_bac4">
+                            <label for="q5_4" data-translate="q5_opt4">Études supérieures (bac+2 à bac+4)</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q5_education_level" id="q5_5" value="sup_bac5">
+                            <label for="q5_5" data-translate="q5_opt5">Études supérieures (bac+5 et plus)</label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Q6 — Profession -->
+                <fieldset class="form-group">
+                    <legend class="form-label" data-translate="q6_label">Q6. Quelle est votre situation professionnelle ?</legend>
+                    <div class="choices-list">
+                        <div class="choice-item">
+                            <input type="radio" name="q6_profession" id="q6_1" value="etudiant" required>
+                            <label for="q6_1" data-translate="q6_opt1">Élève/étudiant(e)</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q6_profession" id="q6_2" value="prive">
+                            <label for="q6_2" data-translate="q6_opt2">Salarié(e) du secteur privé</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q6_profession" id="q6_3" value="public">
+                            <label for="q6_3" data-translate="q6_opt3">Fonctionnaire/secteur public</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q6_profession" id="q6_4" value="liberal">
+                            <label for="q6_4" data-translate="q6_opt4">Profession libérale/indépendant(e)</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q6_profession" id="q6_5" value="commercant">
+                            <label for="q6_5" data-translate="q6_opt5">Commerçant(e)/artisan(e)</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q6_profession" id="q6_6" value="sans_emploi">
+                            <label for="q6_6" data-translate="q6_opt6">Sans emploi/en recherche</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q6_profession" id="q6_7" value="retraite">
+                            <label for="q6_7" data-translate="q6_opt7">Retraité(e)</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q6_profession" id="q6_8" value="foyer">
+                            <label for="q6_8" data-translate="q6_opt8">Au foyer</label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <!-- ========== SECTION B — Mémoire et fréquentation ========== -->
+            <div class="survey-section" data-section="B">
+                <h3 class="section-title" data-translate="section_b_title">B – Mémoire et fréquentation des anciennes salles</h3>
+
+                <!-- Q7 — Fréquentation passée -->
+                <fieldset class="form-group">
+                    <legend class="form-label" data-translate="q7_label">Q7. Avez-vous déjà fréquenté une salle de cinéma à Safi ?</legend>
+                    <div class="choices-list">
+                        <div class="choice-item">
+                            <input type="radio" name="q7_visited_cinema" id="q7_1" value="oui" onchange="toggleQ7Conditional()">
+                            <label for="q7_1" data-translate="q7_opt1">Oui</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q7_visited_cinema" id="q7_2" value="non" onchange="toggleQ7Conditional()">
+                            <label for="q7_2" data-translate="q7_opt2">Non</label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Conditional questions (visible only if Q7 = Oui) -->
+                <div id="q7_conditional_wrapper" style="display:none;">
+
+                    <!-- Q8 — Périodes -->
+                    <fieldset class="form-group">
+                        <legend class="form-label" data-translate="q8_label">Q8. À quelle(s) période(s) avez-vous fréquenté les salles de cinéma à Safi ? (plusieurs réponses possibles)</legend>
+                        <div class="choices-list">
+                            <div class="choice-item">
+                                <input type="checkbox" name="q8_periods" id="q8_1" value="avant_1980">
+                                <label for="q8_1" data-translate="q8_opt1">Avant 1980</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="checkbox" name="q8_periods" id="q8_2" value="annees_1980">
+                                <label for="q8_2" data-translate="q8_opt2">Années 1980</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="checkbox" name="q8_periods" id="q8_3" value="annees_1990">
+                                <label for="q8_3" data-translate="q8_opt3">Années 1990</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="checkbox" name="q8_periods" id="q8_4" value="annees_2000">
+                                <label for="q8_4" data-translate="q8_opt4">Années 2000</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="checkbox" name="q8_periods" id="q8_5" value="annees_2010">
+                                <label for="q8_5" data-translate="q8_opt5">Années 2010 et après</label>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Q9 — Fréquence -->
+                    <fieldset class="form-group">
+                        <legend class="form-label" data-translate="q9_label">Q9. À quelle fréquence y alliez-vous ?</legend>
+                        <div class="choices-list">
+                            <div class="choice-item">
+                                <input type="radio" name="q9_frequency" id="q9_1" value="plusieurs_semaine">
+                                <label for="q9_1" data-translate="q9_opt1">Plusieurs fois par semaine</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="radio" name="q9_frequency" id="q9_2" value="une_semaine">
+                                <label for="q9_2" data-translate="q9_opt2">Environ une fois par semaine</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="radio" name="q9_frequency" id="q9_3" value="une_deux_mois">
+                                <label for="q9_3" data-translate="q9_opt3">Une à deux fois par mois</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="radio" name="q9_frequency" id="q9_4" value="quelques_an">
+                                <label for="q9_4" data-translate="q9_opt4">Quelques fois par an</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="radio" name="q9_frequency" id="q9_5" value="rarement">
+                                <label for="q9_5" data-translate="q9_opt5">Rarement/occasionnellement</label>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Q10 — Accompagnement -->
+                    <fieldset class="form-group">
+                        <legend class="form-label" data-translate="q10_label">Q10. Avec qui y alliez-vous généralement ? (plusieurs réponses possibles)</legend>
+                        <div class="choices-list">
+                            <div class="choice-item">
+                                <input type="checkbox" name="q10_companions" id="q10_1" value="seul">
+                                <label for="q10_1" data-translate="q10_opt1">Seul(e)</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="checkbox" name="q10_companions" id="q10_2" value="famille">
+                                <label for="q10_2" data-translate="q10_opt2">En famille</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="checkbox" name="q10_companions" id="q10_3" value="amis">
+                                <label for="q10_3" data-translate="q10_opt3">Avec des amis</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="checkbox" name="q10_companions" id="q10_4" value="couple">
+                                <label for="q10_4" data-translate="q10_opt4">En couple</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="checkbox" name="q10_companions" id="q10_5" value="voisins">
+                                <label for="q10_5" data-translate="q10_opt5">Avec des voisins/collègues</label>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <!-- Q11 — Types de films -->
+                    <fieldset class="form-group">
+                        <legend class="form-label" data-translate="q11_label">Q11. Quel type de films regardiez-vous principalement ? (plusieurs réponses possibles)</legend>
+                        <div class="choices-list">
+                            <div class="choice-item">
+                                <input type="checkbox" name="q11_movie_types" id="q11_1" value="marocains">
+                                <label for="q11_1" data-translate="q11_opt1">Films marocains</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="checkbox" name="q11_movie_types" id="q11_2" value="egyptiens">
+                                <label for="q11_2" data-translate="q11_opt2">Films égyptiens/arabes</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="checkbox" name="q11_movie_types" id="q11_3" value="indiens">
+                                <label for="q11_3" data-translate="q11_opt3">Films indiens</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="checkbox" name="q11_movie_types" id="q11_4" value="americains">
+                                <label for="q11_4" data-translate="q11_opt4">Films américains/occidentaux</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="checkbox" name="q11_movie_types" id="q11_5" value="action">
+                                <label for="q11_5" data-translate="q11_opt5">Films d'action/aventure</label>
+                            </div>
+                            <div class="choice-item">
+                                <input type="checkbox" name="q11_movie_types" id="q11_6" value="autres" onchange="toggleOtherField('q11_other_wrapper', this)">
+                                <label for="q11_6" data-translate="q11_opt6">Autres</label>
+                            </div>
+                        </div>
+                        <div id="q11_other_wrapper" class="other-field-wrapper" style="display:none;">
+                            <input type="text" name="q11_other" id="q11_other" class="form-input" data-translate-placeholder="q11_other_placeholder" placeholder="Précisez...">
+                        </div>
+                    </fieldset>
+
+                    <!-- Q12 — Souvenir -->
+                    <div class="form-group">
+                        <label for="q12_memory" class="form-label" data-translate="q12_label">Q12. Pouvez-vous partager un souvenir marquant lié à une salle de cinéma de Safi ?</label>
+                        <textarea name="q12_memory" id="q12_memory" class="form-textarea" rows="4" data-translate-placeholder="q12_placeholder" placeholder="Racontez votre souvenir..."></textarea>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ========== SECTION C — Connaissance et identification ========== -->
+            <div class="survey-section" data-section="C">
+                <h3 class="section-title" data-translate="section_c_title">C – Connaissance et identification des salles</h3>
+
+                <!-- Q13 — Identification des salles -->
+                <div class="form-group">
+                    <label class="form-label" data-translate="q13_label">Q13. Quelles anciennes salles de cinéma de Safi connaissez-vous ? (Ajoutez autant de lignes que nécessaire)</label>
+                    <textarea name="q13_text" id="q13_text" class="form-textarea" rows="3" data-translate-placeholder="q13_placeholder" placeholder="Listez les salles que vous connaissez..."></textarea>
+                    <div class="table-responsive">
+                        <table class="dynamic-table" id="q13_table">
+                            <thead>
+                                <tr>
+                                    <th data-translate="q13_col1">Nom de la salle</th>
+                                    <th data-translate="q13_col2">Quartier/localisation</th>
+                                    <th data-translate="q13_col3">État actuel</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" name="q13_name_1" class="form-input table-input"></td>
+                                    <td><input type="text" name="q13_location_1" class="form-input table-input"></td>
+                                    <td><input type="text" name="q13_state_1" class="form-input table-input"></td>
+                                    <td><button type="button" class="btn-remove-row" onclick="removeTableRow(this)" title="Supprimer">✕</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn-add-row" onclick="addTableRow('q13_table')" data-translate="q13_add_row">+ Ajouter une ligne</button>
+                    </div>
+                </div>
+
+                <!-- Q14 — Devenir des salles -->
+                <fieldset class="form-group">
+                    <legend class="form-label" data-translate="q14_label">Q14. Selon vous, que sont devenues la plupart de ces salles ? (plusieurs réponses possibles)</legend>
+                    <div class="choices-list">
+                        <div class="choice-item">
+                            <input type="checkbox" name="q14_what_became" id="q14_1" value="abandonnees">
+                            <label for="q14_1" data-translate="q14_opt1">Abandonnées/à l'état de ruine</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q14_what_became" id="q14_2" value="commerces">
+                            <label for="q14_2" data-translate="q14_opt2">Transformées en commerces</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q14_what_became" id="q14_3" value="entrepots">
+                            <label for="q14_3" data-translate="q14_opt3">Transformées en entrepôts/parkings</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q14_what_became" id="q14_4" value="demolies">
+                            <label for="q14_4" data-translate="q14_opt4">Démolies</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q14_what_became" id="q14_5" value="reaffectees">
+                            <label for="q14_5" data-translate="q14_opt5">Réaffectées à un autre usage culturel</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q14_what_became" id="q14_6" value="ne_sais_pas">
+                            <label for="q14_6" data-translate="q14_opt6">Je ne sais pas</label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <!-- ========== SECTION D — Causes de fermeture ========== -->
+            <div class="survey-section" data-section="D">
+                <h3 class="section-title" data-translate="section_d_title">D – Causes perçues de la fermeture des salles</h3>
+
+                <!-- Q15 — Échelle de Likert -->
+                <div class="form-group">
+                    <label class="form-label" data-translate="q15_label">Q15. Dans quelle mesure chacun des facteurs suivants a-t-il, selon vous, contribué à la fermeture des salles de cinéma à Safi ?</label>
+                    <div class="table-responsive">
+                        <table class="likert-table">
+                            <thead>
+                                <tr>
+                                    <th class="likert-statement-col" data-translate="likert_statement">Énoncé</th>
+                                    <th data-translate="likert_1">Pas du tout</th>
+                                    <th data-translate="likert_2">Plutôt non</th>
+                                    <th data-translate="likert_3">Neutre</th>
+                                    <th data-translate="likert_4">Plutôt oui</th>
+                                    <th data-translate="likert_5">Tout à fait</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q15_s1">La télévision et les chaînes satellitaires ont détourné le public.</td>
+                                    <td><input type="radio" class="likert-radio" name="q15_1" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_1" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_1" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_1" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_1" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q15_s2">Internet, le streaming et le téléchargement ont remplacé la salle.</td>
+                                    <td><input type="radio" class="likert-radio" name="q15_2" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_2" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_2" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_2" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_2" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q15_s3">Le piratage des films a nui aux salles.</td>
+                                    <td><input type="radio" class="likert-radio" name="q15_3" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_3" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_3" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_3" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_3" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q15_s4">Le prix des billets était devenu trop élevé.</td>
+                                    <td><input type="radio" class="likert-radio" name="q15_4" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_4" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_4" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_4" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_4" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q15_s5">Les salles étaient vétustes et mal entretenues.</td>
+                                    <td><input type="radio" class="likert-radio" name="q15_5" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_5" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_5" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_5" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_5" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q15_s6">La qualité ou le choix des films proposés s'est dégradé.</td>
+                                    <td><input type="radio" class="likert-radio" name="q15_6" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_6" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_6" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_6" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_6" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q15_s7">Le sentiment d'insécurité ou la mauvaise réputation des salles.</td>
+                                    <td><input type="radio" class="likert-radio" name="q15_7" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_7" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_7" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_7" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_7" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q15_s8">La hausse de la valeur des terrains a poussé à vendre les salles.</td>
+                                    <td><input type="radio" class="likert-radio" name="q15_8" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_8" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_8" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_8" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_8" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q15_s9">Le manque de soutien des pouvoirs publics à ces salles.</td>
+                                    <td><input type="radio" class="likert-radio" name="q15_9" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_9" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_9" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_9" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_9" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q15_s10">Les habitudes de sortie et de loisirs ont changé.</td>
+                                    <td><input type="radio" class="likert-radio" name="q15_10" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_10" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_10" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_10" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q15_10" value="5"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Q16 — Cause principale -->
+                <div class="form-group">
+                    <label for="q16_main_cause" class="form-label" data-translate="q16_label">Q16. Selon vous, quelle est la cause principale de la fermeture des salles de cinéma à Safi ?</label>
+                    <input type="text" name="q16_main_cause" id="q16_main_cause" class="form-input" data-translate-placeholder="q16_placeholder" placeholder="Votre réponse...">
+                </div>
+            </div>
+
+            <!-- ========== SECTION E — Représentations et attachement ========== -->
+            <div class="survey-section" data-section="E">
+                <h3 class="section-title" data-translate="section_e_title">E – Représentations et attachement</h3>
+
+                <!-- Q17 — Échelle de Likert -->
+                <div class="form-group">
+                    <label class="form-label" data-translate="q17_label">Q17. Indiquez votre degré d'accord avec les affirmations suivantes :</label>
+                    <div class="table-responsive">
+                        <table class="likert-table">
+                            <thead>
+                                <tr>
+                                    <th class="likert-statement-col" data-translate="likert_statement">Énoncé</th>
+                                    <th data-translate="likert_1">Pas du tout</th>
+                                    <th data-translate="likert_2">Plutôt non</th>
+                                    <th data-translate="likert_3">Neutre</th>
+                                    <th data-translate="likert_4">Plutôt oui</th>
+                                    <th data-translate="likert_5">Tout à fait</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q17_s1">Ces anciennes salles me rappellent de bons souvenirs.</td>
+                                    <td><input type="radio" class="likert-radio" name="q17_1" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_1" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_1" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_1" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_1" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q17_s2">Leur fermeture représente une perte pour la ville de Safi.</td>
+                                    <td><input type="radio" class="likert-radio" name="q17_2" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_2" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_2" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_2" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_2" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q17_s3">Leur état actuel me paraît dégradé et désolant.</td>
+                                    <td><input type="radio" class="likert-radio" name="q17_3" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_3" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_3" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_3" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_3" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q17_s4">Je me sens personnellement attaché(e) à ces lieux.</td>
+                                    <td><input type="radio" class="likert-radio" name="q17_4" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_4" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_4" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_4" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_4" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q17_s5">Ces salles font partie de l'identité de Safi.</td>
+                                    <td><input type="radio" class="likert-radio" name="q17_5" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_5" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_5" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_5" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_5" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q17_s6">Les jeunes générations ignorent l'histoire de ces salles.</td>
+                                    <td><input type="radio" class="likert-radio" name="q17_6" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_6" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_6" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_6" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q17_6" value="5"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Q18 — Signification -->
+                <div class="form-group">
+                    <label for="q18_meaning" class="form-label" data-translate="q18_label">Q18. Que représentent pour vous ces anciennes salles de cinéma ?</label>
+                    <input type="text" name="q18_meaning" id="q18_meaning" class="form-input" data-translate-placeholder="q18_placeholder" placeholder="Votre réponse...">
+                </div>
+            </div>
+
+            <!-- ========== SECTION F — Patrimoine et avenir ========== -->
+            <div class="survey-section" data-section="F">
+                <h3 class="section-title" data-translate="section_f_title">F – Patrimoine et avenir des salles</h3>
+
+                <!-- Q19 — Échelle de Likert -->
+                <div class="form-group">
+                    <label class="form-label" data-translate="q19_label">Q19. Indiquez votre degré d'accord avec les affirmations suivantes :</label>
+                    <div class="table-responsive">
+                        <table class="likert-table">
+                            <thead>
+                                <tr>
+                                    <th class="likert-statement-col" data-translate="likert_statement">Énoncé</th>
+                                    <th data-translate="likert_1">Pas du tout</th>
+                                    <th data-translate="likert_2">Plutôt non</th>
+                                    <th data-translate="likert_3">Neutre</th>
+                                    <th data-translate="likert_4">Plutôt oui</th>
+                                    <th data-translate="likert_5">Tout à fait</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q19_s1">Ces salles font partie du patrimoine culturel de Safi.</td>
+                                    <td><input type="radio" class="likert-radio" name="q19_1" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_1" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_1" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_1" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_1" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q19_s2">Il faudrait préserver et réhabiliter au moins certaines d'entre elles.</td>
+                                    <td><input type="radio" class="likert-radio" name="q19_2" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_2" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_2" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_2" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_2" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q19_s3">Leur réhabilitation pourrait dynamiser le centre-ville.</td>
+                                    <td><input type="radio" class="likert-radio" name="q19_3" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_3" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_3" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_3" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_3" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q19_s4">Leur valorisation pourrait créer des emplois et des activités.</td>
+                                    <td><input type="radio" class="likert-radio" name="q19_4" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_4" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_4" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_4" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_4" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q19_s5">Je fréquenterais un lieu culturel créé dans une ancienne salle.</td>
+                                    <td><input type="radio" class="likert-radio" name="q19_5" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_5" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_5" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_5" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_5" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q19_s6">Les habitants devraient être associés aux décisions les concernant.</td>
+                                    <td><input type="radio" class="likert-radio" name="q19_6" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_6" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_6" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_6" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q19_6" value="5"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Q20 — Usages souhaités -->
+                <fieldset class="form-group">
+                    <legend class="form-label" data-translate="q20_label">Q20. Si ces salles devaient être réhabilitées, quel usage souhaiteriez-vous ? (plusieurs réponses possibles)</legend>
+                    <div class="choices-list">
+                        <div class="choice-item">
+                            <input type="checkbox" name="q20_desired_usage" id="q20_1" value="cinema">
+                            <label for="q20_1" data-translate="q20_opt1">Salle de cinéma</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q20_desired_usage" id="q20_2" value="cinematheque">
+                            <label for="q20_2" data-translate="q20_opt2">Cinémathèque</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q20_desired_usage" id="q20_3" value="spectacles">
+                            <label for="q20_3" data-translate="q20_opt3">Salle de spectacles</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q20_desired_usage" id="q20_4" value="centre_culturel">
+                            <label for="q20_4" data-translate="q20_opt4">Centre culturel</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q20_desired_usage" id="q20_5" value="mediatheque">
+                            <label for="q20_5" data-translate="q20_opt5">Médiathèque</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q20_desired_usage" id="q20_6" value="coworking">
+                            <label for="q20_6" data-translate="q20_opt6">Espace coworking</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q20_desired_usage" id="q20_7" value="cafe_culturel">
+                            <label for="q20_7" data-translate="q20_opt7">Café culturel</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q20_desired_usage" id="q20_8" value="musee">
+                            <label for="q20_8" data-translate="q20_opt8">Musée</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q20_desired_usage" id="q20_9" value="autre" onchange="toggleOtherField('q20_other_wrapper', this)">
+                            <label for="q20_9" data-translate="q20_opt9">Autre</label>
+                        </div>
+                    </div>
+                    <div id="q20_other_wrapper" class="other-field-wrapper" style="display:none;">
+                        <input type="text" name="q20_other" id="q20_other" class="form-input" data-translate-placeholder="q20_other_placeholder" placeholder="Précisez...">
+                    </div>
+                </fieldset>
+
+                <!-- Q21 — Soutien -->
+                <fieldset class="form-group">
+                    <legend class="form-label" data-translate="q21_label">Q21. Seriez-vous prêt(e) à soutenir un projet de réhabilitation ? (plusieurs réponses possibles)</legend>
+                    <div class="choices-list">
+                        <div class="choice-item">
+                            <input type="checkbox" name="q21_support_type" id="q21_1" value="frequenter">
+                            <label for="q21_1" data-translate="q21_opt1">Fréquenter</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q21_support_type" id="q21_2" value="benevole">
+                            <label for="q21_2" data-translate="q21_opt2">Actions bénévoles</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q21_support_type" id="q21_3" value="souvenirs">
+                            <label for="q21_3" data-translate="q21_opt3">Partager souvenirs/photos</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q21_support_type" id="q21_4" value="financier">
+                            <label for="q21_4" data-translate="q21_opt4">Soutien financier</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q21_support_type" id="q21_5" value="non">
+                            <label for="q21_5" data-translate="q21_opt5">Ne souhaite pas</label>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <!-- ========== SECTION G — Information et médias ========== -->
+            <div class="survey-section" data-section="G">
+                <h3 class="section-title" data-translate="section_g_title">G – Information et médias</h3>
+
+                <!-- Q22 — Contenu vu -->
+                <fieldset class="form-group">
+                    <legend class="form-label" data-translate="q22_label">Q22. Avez-vous déjà vu ou lu des contenus (articles, reportages, publications) sur les anciennes salles de cinéma de Safi ?</legend>
+                    <div class="choices-list">
+                        <div class="choice-item">
+                            <input type="radio" name="q22_seen_content" id="q22_1" value="oui" onchange="toggleQ22Conditional()">
+                            <label for="q22_1" data-translate="q22_opt1">Oui</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q22_seen_content" id="q22_2" value="non" onchange="toggleQ22Conditional()">
+                            <label for="q22_2" data-translate="q22_opt2">Non</label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Q23 — Canaux (conditionnel) -->
+                <fieldset class="form-group" id="q23_conditional_wrapper" style="display:none;">
+                    <legend class="form-label" data-translate="q23_label">Q23. Par quel(s) canal/canaux ? (plusieurs réponses possibles)</legend>
+                    <div class="choices-list">
+                        <div class="choice-item">
+                            <input type="checkbox" name="q23_channels" id="q23_1" value="presse">
+                            <label for="q23_1" data-translate="q23_opt1">Presse</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q23_channels" id="q23_2" value="tv_radio">
+                            <label for="q23_2" data-translate="q23_opt2">TV/radio</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q23_channels" id="q23_3" value="reseaux_sociaux">
+                            <label for="q23_3" data-translate="q23_opt3">Réseaux sociaux</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q23_channels" id="q23_4" value="sites_web">
+                            <label for="q23_4" data-translate="q23_opt4">Sites web</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q23_channels" id="q23_5" value="bouche_a_oreille">
+                            <label for="q23_5" data-translate="q23_opt5">Bouche-à-oreille</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="checkbox" name="q23_channels" id="q23_6" value="expositions">
+                            <label for="q23_6" data-translate="q23_opt6">Expositions</label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Q24 — Pages/comptes -->
+                <fieldset class="form-group">
+                    <legend class="form-label" data-translate="q24_label">Q24. Suivez-vous des pages ou des comptes sur les réseaux sociaux dédiés au patrimoine de Safi ?</legend>
+                    <div class="choices-list">
+                        <div class="choice-item">
+                            <input type="radio" name="q24_follow_pages" id="q24_1" value="oui">
+                            <label for="q24_1" data-translate="q24_opt1">Oui</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q24_follow_pages" id="q24_2" value="non">
+                            <label for="q24_2" data-translate="q24_opt2">Non</label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Q25 — Échelle de Likert -->
+                <div class="form-group">
+                    <label class="form-label" data-translate="q25_label">Q25. Indiquez votre degré d'accord avec les affirmations suivantes :</label>
+                    <div class="table-responsive">
+                        <table class="likert-table">
+                            <thead>
+                                <tr>
+                                    <th class="likert-statement-col" data-translate="likert_statement">Énoncé</th>
+                                    <th data-translate="likert_1">Pas du tout</th>
+                                    <th data-translate="likert_2">Plutôt non</th>
+                                    <th data-translate="likert_3">Neutre</th>
+                                    <th data-translate="likert_4">Plutôt oui</th>
+                                    <th data-translate="likert_5">Tout à fait</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q25_s1">Les médias locaux accordent suffisamment d'attention au patrimoine cinématographique de Safi.</td>
+                                    <td><input type="radio" class="likert-radio" name="q25_1" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q25_1" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q25_1" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q25_1" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q25_1" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q25_s2">Les réseaux sociaux peuvent contribuer à sensibiliser le public à ce patrimoine.</td>
+                                    <td><input type="radio" class="likert-radio" name="q25_2" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q25_2" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q25_2" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q25_2" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q25_2" value="5"></td>
+                                </tr>
+                                <tr>
+                                    <td class="likert-statement" data-translate="q25_s3">Un documentaire ou une exposition sur ces salles m'intéresserait.</td>
+                                    <td><input type="radio" class="likert-radio" name="q25_3" value="1"></td>
+                                    <td><input type="radio" class="likert-radio" name="q25_3" value="2"></td>
+                                    <td><input type="radio" class="likert-radio" name="q25_3" value="3"></td>
+                                    <td><input type="radio" class="likert-radio" name="q25_3" value="4"></td>
+                                    <td><input type="radio" class="likert-radio" name="q25_3" value="5"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========== SECTION H — Suggestions ========== -->
+            <div class="survey-section" data-section="H">
+                <h3 class="section-title" data-translate="section_h_title">H – Suggestions et remarques</h3>
+
+                <!-- Q26 — Commentaires -->
+                <div class="form-group">
+                    <label for="q26_comments" class="form-label" data-translate="q26_label">Q26. Avez-vous des commentaires, suggestions ou remarques à ajouter ?</label>
+                    <textarea name="q26_comments" id="q26_comments" class="form-textarea" rows="5" data-translate-placeholder="q26_placeholder" placeholder="Vos commentaires..."></textarea>
+                </div>
+
+                <!-- Q27 — Recontact -->
+                <fieldset class="form-group">
+                    <legend class="form-label" data-translate="q27_label">Q27. Accepteriez-vous d'être recontacté(e) pour un entretien complémentaire ?</legend>
+                    <div class="choices-list">
+                        <div class="choice-item">
+                            <input type="radio" name="q27_recontact" id="q27_1" value="oui" onchange="toggleQ27Conditional()">
+                            <label for="q27_1" data-translate="q27_opt1">Oui</label>
+                        </div>
+                        <div class="choice-item">
+                            <input type="radio" name="q27_recontact" id="q27_2" value="non" onchange="toggleQ27Conditional()">
+                            <label for="q27_2" data-translate="q27_opt2">Non</label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Q27 — Contact (conditionnel) -->
+                <div id="q27_conditional_wrapper" class="form-group" style="display:none;">
+                    <label for="q27_contact_details" class="form-label" data-translate="q27_contact_label">Merci ! Veuillez laisser vos coordonnées (e-mail ou téléphone) :</label>
+                    <input type="text" name="q27_contact_details" id="q27_contact_details" class="form-input" data-translate-placeholder="q27_contact_placeholder" placeholder="E-mail ou numéro de téléphone...">
+                </div>
+            </div>
+
+            <!-- ========== NAVIGATION BUTTONS ========== -->
+            <div class="survey-nav-buttons">
+                <button type="button" class="btn btn-secondary" id="btnPrev" onclick="navigateSection(-1)" disabled>
+                    <span data-translate="btn_prev">⬅ Précédent</span>
+                </button>
+                <button type="button" class="btn btn-primary" id="btnNext" onclick="navigateSection(1)">
+                    <span data-translate="btn_next">Suivant ➡</span>
+                </button>
+                <button type="submit" class="btn btn-success" id="btnSubmit" style="display:none;">
+                    <span data-translate="btn_submit">✅ Envoyer mes réponses</span>
+                </button>
+            </div>
+
+        </form>
+    </div>
+</main>
+
+<!-- ===================== SUCCESS MODAL ===================== -->
+<div class="modal-overlay" id="confirmModal" style="display:none;">
+    <div class="modal-content glass-card">
+        <div class="modal-icon">✅</div>
+        <h3 class="modal-title" data-translate="modal_title">Merci pour votre participation !</h3>
+        <p class="modal-text" data-translate="modal_text">Vos réponses ont été enregistrées avec succès. Votre contribution est précieuse pour cette recherche sur le patrimoine cinématographique de Safi.</p>
+        <button class="btn btn-primary" onclick="location.reload()" data-translate="modal_btn">Remplir un autre questionnaire</button>
+    </div>
+</div>
+
+<!-- ===================== TOAST ===================== -->
+<div class="toast-notif" id="toast"></div>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="app-footer">
+    <p>© 2026 — Master CMIC · Faculté Polydisciplinaire de Safi · Université Cadi Ayyad.</p>
+    <p>Mémoire de fin d'études: Le patrimoine des salles de cinéma fermées de Safi · BOUBAROUD Karim · Encadrant : Mr. Rachid Naim</p>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/realtime.js"></script>
+<script src="js/survey.js"></script>
+</body>
+</html>

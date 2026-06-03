@@ -1,0 +1,117 @@
+[
+  {
+    "q1_gender": "femme",
+    "q2_age_group": "18_24",
+    "q3_neighborhood": "Plateau",
+    "q4_residence_duration": "dur_over20",
+    "q5_education_level": "edu_uni_low",
+    "q6_profession": "prof_student",
+    "q7_visited_cinema": "Oui",
+    "q8_periods": [
+      "p_2000s"
+    ],
+    "q9_frequency": "f_once_month",
+    "q10_companions": [
+      "c_friends"
+    ],
+    "q11_movie_types": [
+      "m_moroccan"
+    ],
+    "q12_memory": "Un tres beau souvenir du cinema Atlantide avec mon grand-pere.",
+    "q13_text": "Atlantide, Roxy",
+    "q13_table": [
+      {
+        "name": "Atlantide",
+        "location": "Centre-ville",
+        "current_state": "Ferme"
+      }
+    ],
+    "q14_what_became": [
+      "b_abandoned"
+    ],
+    "q16_main_cause": "L'avenement d'Internet.",
+    "q18_meaning": "Nostalgie",
+    "q20_desired_usage": [
+      "u_cinema"
+    ],
+    "q21_support_type": [
+      "s_visitor"
+    ],
+    "q26_comments": "Bravo pour l'enquete !",
+    "id": 1,
+    "submission_date": "2026-06-03T16:23:49.127Z"
+  },
+  {
+    "q1_gender": "femme",
+    "q2_age_group": "18_24",
+    "q4_residence_duration": "10_20",
+    "q5_education_level": "college",
+    "q6_profession": "public",
+    "q7_visited_cinema": "oui",
+    "q9_frequency": "une_deux_mois",
+    "q15_1": "1",
+    "q15_2": "1",
+    "q15_3": "1",
+    "q15_4": "1",
+    "q15_5": "1",
+    "q15_6": "4",
+    "q15_7": "4",
+    "q15_8": "4",
+    "q15_9": "4",
+    "q15_10": "4",
+    "q17_1": "4",
+    "q17_2": "4",
+    "q17_3": "5",
+    "q17_4": "5",
+    "q17_5": "5",
+    "q17_6": "5",
+    "q19_1": "5",
+    "q19_2": "5",
+    "q19_3": "5",
+    "q19_4": "5",
+    "q19_5": "5",
+    "q19_6": "5",
+    "q22_seen_content": "oui",
+    "q24_follow_pages": "oui",
+    "q25_1": "5",
+    "q25_2": "5",
+    "q25_3": "5",
+    "q27_recontact": "oui",
+    "q3_neighborhood": "",
+    "q11_other": "",
+    "q12_memory": "kjbskjvbksdv",
+    "q13_text": "dakjvbkajdv",
+    "q13_name_1": "dsfv",
+    "q13_location_1": "",
+    "q13_state_1": "",
+    "q16_main_cause": "clajbckja",
+    "q18_meaning": "akcbjadsc",
+    "q20_other": "",
+    "q26_comments": "khvjch",
+    "q27_contact_details": "",
+    "q8_periods": [
+      "annees_1990"
+    ],
+    "q10_companions": [
+      "amis"
+    ],
+    "q11_movie_types": [
+      "indiens"
+    ],
+    "q14_what_became": [
+      "entrepots"
+    ],
+    "q20_desired_usage": [
+      "cinema"
+    ],
+    "q21_support_type": [
+      "frequenter"
+    ],
+    "q23_channels": [
+      "reseaux_sociaux"
+    ],
+    "q13_table": [],
+    "id": 2,
+    "submission_date": "2026-06-03T16:27:22.010Z"
+  }
+]
